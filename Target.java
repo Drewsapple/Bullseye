@@ -1,26 +1,40 @@
-public class Target{
-  String targetWord = null; //start off empty
-  public Target(int numLetters){
-    targetWord = getWord(numLetters); //gets word from dictionary with right number of letters
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Target {
+  String targetWord; // start off empty
+
+  public Target(int numLetters) {
+    targetWord = getWord(numLetters); // gets word from dictionary with right number of letters
   }
-  public char[] makeArray(){
+
+  public char[] makeArray() {
     char[] arr = new char[targetWord.length()];
-    for(int i = 0; i < targetWord.length();i++){
+    for (int i = 0; i < targetWord.length(); i++) {
       arr[i] = targetWord.charAt(i);
     }
     return arr;
   }
-  private String getWord(int numLetters){
-    String[] dict4 = {"also","dogs","cats","rock","lock","joke"};
-    String[] dict5 = {"Cores","Miles","Bears","Paint"};
-    if(numLetters == 4){
-      return dict4[(int)(Math.random()*(dict4.length))].toLowerCase();
+
+  private String getWord(int numLetters) {
+    var words = new ArrayList<String>();
+    File file = new File("words.english.txt");
+    Scanner dict;
+    try {
+      dict = new Scanner(file);
+      while(dict.hasNext()){
+        String word = dict.next();
+        if(word.length() == numLetters){
+          words.add(word);
+        }
+      }
+      dict.close();
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
-    else if(numLetters == 5){
-      return dict5[(int)(Math.random()*(dict5.length))].toLowerCase();
-    }
-    else{
-      return "";
-    }
+    return words.get((int)(Math.random()*(words.size()))).toLowerCase();
   }
 }
